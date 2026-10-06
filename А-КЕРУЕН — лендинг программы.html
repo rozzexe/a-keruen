@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>А-КЕРУЕН — программа входа в Узбекистан</title>
+<style>
+  :root{
+    --bg:#0B0F0D; --bg-2:#101512; --surface:#151B18; --surface-2:#1B2320; --line:#2A332E; --line-soft:#212925;
+    --ink:#F3F5F3; --ink-soft:#AAB4AE; --ink-faint:#71807A;
+    --green:#009D7E; --green-tint:#0E2620; --yellow:#FCC200; --yellow-tint:#2B2410;
+    --teal:#5FD9BE; --signal:#E2503A; --signal-tint:#2E1712;
+    --font-d:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    --font-b:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    --font-m:ui-monospace,'SFMono-Regular','Cascadia Mono','Roboto Mono',Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 34px -18px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-b); line-height:1.55; -webkit-font-smoothing:antialiased;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1120px; margin-inline:auto; padding-inline:20px;}
+  .narrow{max-width:820px; margin-inline:auto; padding-inline:20px;}
+  a{color:inherit;}
+
+  .topnav{position:sticky; top:0; z-index:50; background:rgba(11,15,13,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line-soft); overflow-x:auto; white-space:nowrap;}
+  .topnav .inner{max-width:1160px; margin-inline:auto; padding:10px 20px; display:flex; gap:15px; align-items:center;}
+  .topnav .brand{font-family:var(--font-d); font-weight:800; font-size:13px; letter-spacing:.06em; color:var(--yellow); flex:none;}
+  .topnav a{color:var(--ink-soft); text-decoration:none; font-size:11.5px; font-family:var(--font-m); padding:4px 2px; border-bottom:1px solid transparent; transition:color .15s, border-color .15s;}
+  .topnav a:hover{color:var(--green); border-color:var(--green);}
+
+  .hero{padding:60px 20px 48px; position:relative; overflow:hidden;
+    background:radial-gradient(circle at 85% -10%, rgba(0,157,126,.18), transparent 55%), radial-gradient(circle at 10% 110%, rgba(252,194,0,.10), transparent 55%), var(--bg-2);
+    border-bottom:1px solid var(--line-soft);}
+  .hero::before{content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(115deg, rgba(255,255,255,.02) 0 1px, transparent 1px 40px);}
+  .hero-inner{max-width:1120px; margin-inline:auto; position:relative;}
+  .eyebrow{font-family:var(--font-m); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--yellow); margin:0 0 18px;}
+  .hero h1{font-family:var(--font-d); font-weight:900; font-size:clamp(44px,8.5vw,86px); line-height:.94; margin:0 0 14px; letter-spacing:.01em; color:#fff;}
+  .hero h1 .dash{color:var(--green);}
+  .tagline{font-family:var(--font-d); font-weight:700; font-size:clamp(15px,2.2vw,19px); color:var(--ink); margin:0 0 10px; max-width:60ch;}
+  .hero-sub{color:var(--ink-soft); font-size:16px; max-width:62ch; margin:0 0 30px; font-weight:600;}
+  .stat-row{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:24px;}
+  .stat{background:rgba(255,255,255,.035); border:1px solid var(--line); border-radius:12px; padding:13px 18px; min-width:150px; flex:1 1 150px;}
+  .stat .num{display:block; font-family:var(--font-d); font-weight:800; font-size:26px; color:var(--yellow);}
+  .stat .label{display:block; font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+  .hero-meta{font-family:var(--font-m); font-size:12px; color:var(--ink-faint);}
+
+  section{padding:54px 20px; border-bottom:1px solid var(--line-soft);}
+  section.tight{padding:38px 20px;}
+  .sec-in{max-width:1120px; margin-inline:auto;}
+  .kicker{font-family:var(--font-m); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--green); margin:0 0 10px;}
+  h2{font-family:var(--font-d); font-weight:800; font-size:clamp(21px,2.8vw,30px); margin:0 0 14px; color:#fff;}
+  h3{font-family:var(--font-d); font-weight:700; font-size:15.5px; margin:0 0 10px; color:var(--ink);}
+  h4{font-family:var(--font-d); font-weight:700; font-size:13px; margin:0 0 6px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.03em;}
+  p{margin:0 0 12px; color:var(--ink-soft);}
+  p.lead{font-size:15.5px; color:var(--ink); max-width:74ch;}
+  ul{margin:8px 0; padding-left:19px; color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  .fine{font-size:12px; color:var(--ink-faint); font-family:var(--font-m);}
+
+  .letters{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 22px;}
+  @media (max-width:760px){.letters{grid-template-columns:repeat(2,1fr);}}
+  .letter-card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 16px; box-shadow:var(--shadow); transition:transform .15s, border-color .15s;}
+  .letter-card:hover{transform:translateY(-2px); border-color:var(--green);}
+  .letter-card .L{font-family:var(--font-d); font-weight:900; font-size:34px; color:var(--yellow);}
+  .letter-card .L.g{color:var(--green);}
+  .letter-card .L.k{font-size:20px; color:#fff;}
+  .letter-card .t{font-size:12.5px; color:var(--ink-soft); margin-top:6px;}
+  .keruen-note{background:var(--surface); border-left:3px solid var(--yellow); border-radius:10px; padding:16px 20px; box-shadow:var(--shadow); font-size:14px; color:var(--ink);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media (max-width:820px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); transition:border-color .15s, transform .15s;}
+  .card:hover{border-color:var(--line-soft); transform:translateY(-1px);}
+  .card.accent-g{border-top:3px solid var(--green);}
+  .card.accent-y{border-top:3px solid var(--yellow);}
+  .card h3{margin-bottom:12px;}
+  .card ul{margin:0; padding-left:18px;}
+  .goal-box{background:var(--surface-2); border-radius:10px; padding:12px 16px; margin-bottom:14px; font-size:13.5px; color:var(--ink);}
+
+  .num-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .num-list li{display:flex; gap:12px; align-items:flex-start; color:var(--ink-soft); font-size:13.5px;}
+  .num-list .chip{font-family:var(--font-d); font-weight:800; font-size:12px; color:var(--bg); background:var(--yellow); border-radius:999px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; flex:none;}
+  .num-list .chip.g{background:var(--green);}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th,td{text-align:left; padding:9px 11px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft);}
+  th{font-family:var(--font-d); font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--yellow); background:rgba(255,255,255,.02);}
+  td strong, td b{color:var(--ink);}
+  .tbl-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--surface);}
+  .tbl-wrap table{margin:0;} .tbl-wrap tr:last-child td{border-bottom:none;}
+
+  .tag{border-radius:10px; padding:12px 16px; margin:14px 0; font-size:13px; box-shadow:var(--shadow);}
+  .tag.fact{background:var(--green-tint); border-left:3px solid var(--green); color:var(--ink);}
+  .tag.hypo{background:var(--yellow-tint); border-left:3px solid var(--yellow); color:var(--ink);}
+  .tag.warn{background:var(--signal-tint); border-left:3px solid var(--signal); color:var(--ink);}
+  .tag b{font-family:var(--font-m); font-size:10.5px; letter-spacing:.05em;}
+  .tag.fact b{color:var(--green);} .tag.hypo b{color:var(--yellow);} .tag.warn b{color:var(--signal);}
+
+  .principle{background:linear-gradient(120deg,var(--green-tint),var(--surface)); border:1px solid var(--green); border-radius:14px; padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow);}
+  .principle b.h{font-family:var(--font-m); font-size:11px; letter-spacing:.08em; color:var(--green); display:block; margin-bottom:8px;}
+  .principle p{color:var(--ink); font-size:14px; margin:0;}
+
+  figure{margin:0;}
+  .fig-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow);}
+  svg{display:block; width:100%; height:auto;}
+  figcaption{margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); font-size:12px; color:var(--ink-faint);}
+
+  .stage-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin-bottom:16px; box-shadow:var(--shadow); border-left:4px solid var(--green);}
+  .stage-card.s2{border-left-color:var(--yellow);}
+  .stage-card.s3{border-left-color:var(--teal);}
+  .stage-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px;}
+  .stage-head .name{font-family:var(--font-d); font-weight:900; font-size:23px; color:#fff;}
+  .stage-head .period{font-family:var(--font-m); font-size:11.5px; color:var(--ink-faint);}
+  .stage-sub{font-size:12.5px; color:var(--ink-faint); margin-bottom:14px;}
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:10px;}
+  @media (max-width:700px){.two-col{grid-template-columns:1fr;}}
+
+  .gpp-legend{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px;}
+  @media (max-width:760px){.gpp-legend{grid-template-columns:1fr;}}
+  .gpp-legend .item{border-radius:10px; padding:12px 14px; font-size:12.5px;}
+  .gpp-legend .go{background:var(--green-tint); border:1px solid var(--green);}
+  .gpp-legend .pivot{background:var(--yellow-tint); border:1px solid var(--yellow);}
+  .gpp-legend .pause{background:var(--signal-tint); border:1px solid var(--signal);}
+  .gpp-legend b{font-family:var(--font-m); font-size:11px; letter-spacing:.06em; display:block; margin-bottom:4px;}
+  .gpp-legend .go b{color:var(--green);} .gpp-legend .pivot b{color:var(--yellow);} .gpp-legend .pause b{color:var(--signal);}
+
+  .contour-row{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:12px; box-shadow:var(--shadow);}
+  .contour-row .cname{font-family:var(--font-d); font-weight:800; font-size:15px; color:#fff; margin-bottom:10px;}
+  .contour-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media (max-width:760px){.contour-grid{grid-template-columns:1fr;}}
+  .contour-grid div{font-size:12.5px; padding:8px 10px; border-radius:8px;}
+  .contour-grid .go{background:var(--green-tint); color:var(--ink);}
+  .contour-grid .pivot{background:var(--yellow-tint); color:var(--ink);}
+  .contour-grid .pause{background:var(--signal-tint); color:var(--ink);}
+  .contour-grid strong{display:block; font-family:var(--font-m); font-size:10px; margin-bottom:3px;}
+
+  .tl-axis{position:relative; height:50px; margin-bottom:20px;}
+  .tl-line{position:absolute; left:0; right:0; top:22px; height:2px; background:var(--line);}
+  .tl-pt{position:absolute; top:10px; width:24px; height:24px; border-radius:50%; background:var(--surface); border:2px solid var(--green); display:flex; align-items:center; justify-content:center; font-family:var(--font-m); font-size:9px; color:var(--ink); transform:translateX(-50%);}
+  .tl-pt.mid{border-color:var(--yellow);} .tl-pt.end{border-color:var(--teal);}
+  .tl-label{position:absolute; top:38px; transform:translateX(-50%); font-family:var(--font-m); font-size:10px; color:var(--ink-faint); white-space:nowrap;}
+
+  .lanes{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media (max-width:880px){.lanes{grid-template-columns:1fr;}}
+  .lane{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); border-top:3px solid var(--green);}
+  .lane.l2{border-top-color:var(--teal);}
+  .lane.l3{border-top-color:var(--yellow);}
+  .lane .dirtag{display:inline-block; font-family:var(--font-m); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:999px; margin-bottom:8px;}
+  .lane.l1 .dirtag, .lane.l2 .dirtag{background:var(--green-tint); color:var(--green);}
+  .lane.l3 .dirtag{background:var(--yellow-tint); color:var(--yellow);}
+  .lane .ltitle{font-family:var(--font-d); font-weight:800; font-size:14.5px; color:#fff; margin-bottom:2px;}
+  .lane .lgoal{font-size:12px; color:var(--ink-faint); margin-bottom:14px;}
+  .lane .phase{font-family:var(--font-m); font-size:9.5px; letter-spacing:.03em; color:var(--ink-faint); text-transform:uppercase; margin:12px 0 6px;}
+  .lane ul{margin:0; padding-left:16px; font-size:12.5px;}
+  .lane li{margin-bottom:5px;}
+
+  .checklist{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px 20px;}
+  @media (max-width:700px){.checklist{grid-template-columns:1fr;}}
+  .checklist li{display:flex; gap:10px; font-size:13px; color:var(--ink);}
+  .checklist li::before{content:"✓"; color:var(--green); font-weight:800; flex:none;}
+  .checklist.tri{grid-template-columns:repeat(3,1fr);}
+  @media (max-width:820px){.checklist.tri{grid-template-columns:1fr;}}
+
+  .funnel-cap{text-align:center; font-family:var(--font-d); font-weight:800; font-size:16px; color:#fff; margin-top:12px;}
+  .funnel-goal{background:var(--surface-2); border-radius:10px; padding:10px 14px; font-size:12.5px; color:var(--ink); margin-bottom:14px;}
+
+  .route-flow{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:10px;}
+  @media (max-width:760px){.route-flow{grid-template-columns:1fr;}}
+  .rf-col{display:flex; flex-direction:column; align-items:stretch; gap:6px;}
+  .rf-box{background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; color:var(--ink);}
+  .rf-box.hl{background:var(--green-tint); border-color:var(--green);}
+  .rf-arrow{text-align:center; color:var(--ink-faint); font-size:14px; line-height:1;}
+  .rf-head{font-family:var(--font-d); font-weight:700; font-size:12.5px; color:#fff; margin-bottom:4px;}
+
+  .formula-strip{display:flex; flex-wrap:wrap; align-items:center; gap:8px; justify-content:center; padding:20px 8px;}
+  .f-box{background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:11px 15px; font-size:12px; text-align:center; color:var(--ink); min-width:110px;}
+  .f-box.result{background:var(--green-tint); border-color:var(--green); font-weight:700;}
+  .f-op{font-family:var(--font-d); font-weight:800; font-size:17px; color:var(--yellow);}
+  .bucket-row{display:flex; gap:10px; flex-wrap:wrap; margin:16px 0;}
+  .bucket{font-family:var(--font-m); font-size:11.5px; color:var(--bg); background:var(--yellow); padding:6px 12px; border-radius:999px; font-weight:700;}
+
+  .func-card .role{font-family:var(--font-m); font-size:10px; color:var(--ink-faint); margin-top:2px;}
+
+  .decision-cols{display:grid; grid-template-columns:1fr 1fr; gap:10px 30px;}
+  @media (max-width:700px){.decision-cols{grid-template-columns:1fr;}}
+  .decision-cols ol{margin:0; padding:0; list-style:none; counter-reset:d;}
+  .decision-cols li{display:flex; gap:12px; align-items:flex-start; color:var(--ink); font-size:13.5px; margin-bottom:11px;}
+
+  .cat{display:inline-flex; align-items:center; gap:6px; font-family:var(--font-m); font-size:10.5px; white-space:nowrap;}
+  .cat .d{width:8px; height:8px; border-radius:50%; flex:none;}
+
+  .closing{background:linear-gradient(165deg,var(--bg-2),#0D110F); padding:54px 20px;}
+  .closing .sec-in{max-width:1120px; margin-inline:auto;}
+  .closing h2{color:#fff;}
+  .sign{margin-top:26px; padding-top:20px; border-top:1px solid var(--line-soft); font-family:var(--font-m); font-size:12.5px; color:var(--ink-soft); line-height:1.9;}
+  .sign b{color:var(--ink);}
+  .disclaimer{margin-top:14px; font-size:12px; color:var(--ink-faint); max-width:70ch;}
+
+  .src-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; font-size:12.5px;}
+  @media (max-width:700px){.src-list{grid-template-columns:1fr;}}
+  .src-list a{color:var(--green); text-decoration:none; border-bottom:1px dashed var(--green);}
+  .src-list a:hover{color:var(--yellow); border-color:var(--yellow);}
+  .src-list .nolink{color:var(--ink-soft);}
+  .src-list .note{color:var(--ink-faint); font-size:11px;}
+
+  @media print{
+    body{background:#fff; color:#111; font-size:11px;}
+    .topnav{display:none;}
+    .hero,.closing,section{background:#fff !important; border-color:#ccc !important; padding:18px 0 !important;}
+    .hero::before{display:none;}
+    h1,h2,h3,h4,.hero h1,.tagline,.stat .num,.stage-head .name,.lane .ltitle,.rf-head{color:#111 !important;}
+    p,li,td,th{color:#222 !important;}
+    .card,.stage-card,.fig-card,.tbl-wrap,.letter-card,.stat,.lane,.contour-row,.gpp-legend .item,.principle{box-shadow:none !important; break-inside:avoid;}
+    table{font-size:9.5px;}
+    a{color:#111; text-decoration:underline;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="inner">
+    <span class="brand">А‑КЕРУЕН</span>
+    <a href="#name">Название</a>
+    <a href="#why">Возможность</a>
+    <a href="#goal">Цель</a>
+    <a href="#roles">AT / ABK</a>
+    <a href="#cycle">Механика</a>
+    <a href="#route">Этапы</a>
+    <a href="#funnels">Воронки</a>
+    <a href="#days60">Обзор 60 дней</a>
+    <a href="#trip">Поездка</a>
+    <a href="#abkroute">Маршрут ABK</a>
+    <a href="#participation">Участие</a>
+    <a href="#economics">Экономика</a>
+    <a href="#status">Go/Pivot/Pause</a>
+    <a href="#team">Команда</a>
+    <a href="#plan60">План задач</a>
+    <a href="#decisions">Решения</a>
+    <a href="#sources">Источники</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Программа для согласования руководством</p>
+    <h1>А<span class="dash">-</span>КЕРУЕН</h1>
+    <p class="hero-sub">Программа системного входа компании «Аксель и А» на рынок Узбекистана</p>
+    <p class="tagline">Два продукта. Три этапа. Один маршрут к устойчивой позиции.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="num">60</span><span class="label">дней до первой сверки Go/Pivot/Pause</span></div>
+      <div class="stat"><span class="num">4</span><span class="label">контура механики</span></div>
+      <div class="stat"><span class="num">3</span><span class="label">этапа маршрута</span></div>
+      <div class="stat"><span class="num">2</span><span class="label">продукта: AT Care · ABK Care Multi</span></div>
+    </div>
+    <p class="hero-meta">«Аксель и А» · сентябрь 2026</p>
+  </div>
+</header>
+
+<section id="name" class="tight">
+  <div class="sec-in">
+    <p class="kicker">Почему так называется</p>
+    <h2>А‑КЕРУЕН</h2>
+    <div class="letters">
+      <div class="letter-card"><div class="L">А</div><div class="t">«Аксель и А» — компания</div></div>
+      <div class="letter-card"><div class="L g">А</div><div class="t">AT Care — продукт</div></div>
+      <div class="letter-card"><div class="L g">А</div><div class="t">ABK Care Multi — продукт</div></div>
+      <div class="letter-card"><div class="L k">Керуен</div><div class="t">караван — последовательное движение по единому маршруту, где каждый участник выполняет свою задачу</div></div>
+    </div>
+    <div class="keruen-note">«Керуен» отражает движение компании из Казахстана в Узбекистан и расширение присутствия в Центральной Азии. Караван не идёт одним рывком — он проходит маршрут по этапам: <strong>БАСТАУ</strong> (начало пути) → <strong>ТАМЫР</strong> (укоренение) → <strong>ӨРКЕН</strong> (рост и масштабирование). Название проекта и названия этапов — разные уровни одной программы.</div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="narrow">
+    <p class="kicker">Для чего создан проект</p>
+    <h2>Окно возможностей для системного входа</h2>
+    <ul>
+      <li>В Узбекистане формируются нормативные и закупочные условия для развития профилактической диагностики.</li>
+      <li>У компании есть продукты для двух востребованных направлений — контроля диабета и кардиометаболической профилактики.</li>
+      <li>Пока отсутствуют подтверждённый закупочный маршрут, устойчивый локальный канал и партнёрская инфраструктура.</li>
+      <li>Программа должна превратить рыночную возможность в управляемую систему входа и масштабирования.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="goal">
+  <div class="sec-in">
+    <p class="kicker">Цель проекта</p>
+    <div class="card accent-y" style="padding:28px 30px;">
+      <p style="font-size:19px;font-weight:700;color:#fff;max-width:82ch;margin:0;">Сформировать устойчивое присутствие компании «Аксель и А» на рынке Узбекистана: вывести AT Care в B2B- и B2G-каналы диабетического направления, а ABK Care Multi — в B2G-контур программ кардиометаболической профилактики, обеспечив доступ к закупкам, локальное исполнение и последующее масштабирование.</p>
+    </div>
+    <h3 style="margin-top:26px;">Рычаги достижения цели</h3>
+    <ol class="num-list" style="display:grid; grid-template-columns:1fr 1fr; gap:9px 24px;">
+      <li><span class="chip">1</span>Подтверждение потребности</li>
+      <li><span class="chip">2</span>Доступ к маркетинговым исследованиям и закупкам</li>
+      <li><span class="chip">3</span>Создание партнёрской инфраструктуры</li>
+      <li><span class="chip">4</span>Выбор модели участия</li>
+      <li><span class="chip">5</span>Конкурентоспособная экономика</li>
+      <li><span class="chip">6</span>Регистрационная и документальная готовность</li>
+      <li><span class="chip">7</span>Наличие расходных материалов и сервис</li>
+      <li><span class="chip">8</span>Масштабирование подтверждённой модели</li>
+    </ol>
+  </div>
+</section>
+
+<section id="roles">
+  <div class="sec-in">
+    <p class="kicker">Два продуктовых направления</p>
+    <h2>AT Care и ABK Care Multi — разная логика, один маршрут</h2>
+    <div class="grid2">
+      <div class="card accent-g">
+        <h3>AT Care — коммерческий и закупочный трек</h3>
+        <ul>
+          <li>B2B: дистрибьюторы, аптечные сети и коммерческие каналы</li>
+          <li>B2G: государственные закупки глюкометров и тест-полосок</li>
+          <li>Формирование установленной базы приборов</li>
+          <li>Регулярные повторные продажи тест-полосок</li>
+          <li>Ключевые факторы: цена полоски, наличие, сервис, доступность и доверие к продукту</li>
+        </ul>
+        <div class="tag hypo"><b>УТОЧНЕНИЕ.</b> AT Care — не гарантированный быстрый денежный поток. B2B потенциально даёт более ранний коммерческий результат, но зависит от регистрации, цены и готовности партнёров.</div>
+      </div>
+      <div class="card accent-g">
+        <h3>ABK Care Multi — институциональный трек</h3>
+        <ul>
+          <li>Основной канал — B2G</li>
+          <li>Позиционирование в контуре кардиометаболической профилактики</li>
+          <li>Применение на уровне ПМСП</li>
+          <li>Глюкоза и общий холестерин — основные показатели входа; триглицериды — дополнительная диагностическая ценность</li>
+          <li>Сокращение пути пациента при базовом обследовании; не замена полноценной лаборатории</li>
+          <li>Масштабирование — только после подтверждения потребности и рабочего закупочного маршрута</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-in">
+    <p class="kicker">Механика закрепления на рынке</p>
+    <h2>Цикл закрепления и масштабирования</h2>
+    <figure class="fig-card">
+      <svg viewBox="0 0 900 620" role="img" aria-label="Цикл: потребность передаёт в доступ к закупке, тот — в модель участия, тот — в экономику и исполнение, а установленная база и результаты формируют повторную закупку и новый регион, возвращаясь к потребности.">
+        <defs>
+          <marker id="arrC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#009D7E"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="#2A332E">
+          <rect x="40" y="40" width="280" height="90" rx="12" stroke-width="1.6"/>
+          <rect x="580" y="40" width="280" height="90" rx="12" stroke-width="1.6"/>
+          <rect x="580" y="460" width="280" height="90" rx="12" stroke-width="1.6"/>
+          <rect x="40" y="460" width="280" height="90" rx="12" stroke-width="1.6"/>
+        </g>
+        <g font-family="system-ui" fill="#F3F5F3">
+          <text x="60" y="75" font-weight="700" font-size="15">1. Потребность</text>
+          <text x="60" y="97" font-size="11" fill="#AAB4AE">система здравоохранения признаёт необходимость и сценарий</text>
+          <text x="600" y="75" font-weight="700" font-size="15">2. Доступ к закупке</text>
+          <text x="600" y="97" font-size="11" fill="#AAB4AE">маркетисследование, характеристики, цена</text>
+          <text x="600" y="495" font-weight="700" font-size="15">3. Модель участия</text>
+          <text x="600" y="517" font-size="11" fill="#AAB4AE">самостоятельно / дистрибьютор / управляемый вход</text>
+          <text x="60" y="495" font-weight="700" font-size="15">4. Экономика и исполнение</text>
+          <text x="60" y="517" font-size="11" fill="#AAB4AE">цена, поставка, сервис, расходники</text>
+        </g>
+        <g fill="none" stroke="#009D7E" stroke-width="1.8">
+          <line x1="320" y1="85" x2="578" y2="85" marker-end="url(#arrC)"/>
+          <line x1="720" y1="130" x2="720" y2="458" marker-end="url(#arrC)"/>
+          <line x1="578" y1="505" x2="322" y2="505" marker-end="url(#arrC)"/>
+          <line x1="180" y1="460" x2="180" y2="132" marker-end="url(#arrC)"/>
+        </g>
+        <g font-family="ui-monospace" font-size="10.5" fill="#FCC200">
+          <text x="449" y="75" text-anchor="middle">характеристики поданы</text>
+          <text x="735" y="300">модель выбрана</text>
+          <text x="449" y="495" text-anchor="middle">контракт исполнен</text>
+          <text x="165" y="300" text-anchor="end" transform="rotate(-90 165 300)">повторная закупка · новый регион</text>
+        </g>
+        <g font-family="system-ui" fill="#fff" text-anchor="middle">
+          <text x="450" y="290" font-weight="800" font-size="16">ЦИКЛ ЗАКРЕПЛЕНИЯ</text>
+          <text x="450" y="312" font-size="12" fill="#AAB4AE">и масштабирования</text>
+        </g>
+      </svg>
+      <figcaption>Четыре контура работают параллельно. Установленная база и результаты каждого цикла формируют повторную закупку и переход в новый регион.</figcaption>
+    </figure>
+    <div class="tag warn"><b>ВАЖНО.</b> Маркетинговое исследование — закупочный шлюз, но само по себе не создаёт потребность и не гарантирует закупку. Сведения поставщиков могут использоваться заказчиком при изучении рынка, формировании цены и уточнении требований. Окончательное решение остаётся за заказчиком.</div>
+  </div>
+</section>
+
+<section id="route">
+  <div class="sec-in">
+    <p class="kicker">Маршрут программы</p>
+    <h2>Три этапа каравана</h2>
+    <figure class="fig-card" style="margin-bottom:24px;">
+      <svg viewBox="0 0 1000 200" role="img" aria-label="Маршрут из трёх этапов: Бастау (0–4 месяца), Тамыр (4–14 месяцев), Өркен (14–24 месяца и далее), соединённых пунктирной линией маршрута.">
+        <line x1="90" y1="100" x2="910" y2="100" stroke="#2A332E" stroke-width="2" stroke-dasharray="2 10"/>
+        <circle cx="120" cy="100" r="14" fill="#0E2620" stroke="#009D7E" stroke-width="3"/>
+        <circle cx="500" cy="100" r="14" fill="#2B2410" stroke="#FCC200" stroke-width="3"/>
+        <circle cx="880" cy="100" r="14" fill="#0E2620" stroke="#5FD9BE" stroke-width="3"/>
+        <g font-family="system-ui" text-anchor="middle" fill="#fff">
+          <text x="120" y="60" font-weight="900" font-size="22">БАСТАУ</text>
+          <text x="500" y="60" font-weight="900" font-size="22">ТАМЫР</text>
+          <text x="880" y="60" font-weight="900" font-size="22">ӨРКЕН</text>
+        </g>
+        <g font-family="ui-monospace" text-anchor="middle" fill="#AAB4AE" font-size="11.5">
+          <text x="120" y="140">0–4 месяца</text>
+          <text x="500" y="140">4–14 месяцев</text>
+          <text x="880" y="140">14–24 месяца и далее</text>
+        </g>
+        <g font-family="system-ui" text-anchor="middle" fill="#8B90A0" font-size="11.5">
+          <text x="120" y="160">Начало пути</text>
+          <text x="500" y="160">Укоренение</text>
+          <text x="880" y="160">Рост и масштабирование</text>
+        </g>
+      </svg>
+    </figure>
+
+    <div class="stage-card s1">
+      <div class="stage-head"><span class="name">1. БАСТАУ</span><span class="period">0–4 месяца</span></div>
+      <div class="stage-sub">Начало пути</div>
+      <div class="goal-box"><strong>Цель:</strong> получить реальные данные, открыть доступ к рынку, определить рабочий маршрут по AT и ABK и довести первый вход до результата — не только спланировать его. За 4 месяца этапа приборы ABK должны быть переданы в ПМСП (если апробация нужна), а договоры с партнёрами — подписаны или на финальной стадии сделки.</div>
+      <div class="two-col">
+        <div>
+          <h3>Основные действия</h3>
+          <ul>
+            <li>Провести регуляторный аудит</li>
+            <li>Собрать историю закупок и цен</li>
+            <li>Настроить мониторинг маркетинговых исследований</li>
+            <li>Составить карту ЛПР и владельцев процессов</li>
+            <li>Проверить механизм формирования потребности</li>
+            <li>Найти, квалифицировать и вывести на подписание партнёров</li>
+            <li>Сравнить модели участия</li>
+            <li>Определить необходимость апробации ABK</li>
+            <li>Провести апробацию ABK, если она требуется</li>
+            <li>Сформировать или подтвердить институциональную потребность</li>
+            <li>Подать характеристики AT (и ABK, если путь позволяет) в маркетинговое исследование</li>
+            <li>Рассчитать предварительную экономику</li>
+            <li>Подготовить технические и ценовые пакеты</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Результат этапа</h3>
+          <ul>
+            <li>Подтверждён закупочный маршрут</li>
+            <li>Договоры с основным и резервным партнёром подписаны или на финальной стадии сделки</li>
+            <li>Апробация ABK проведена (если требовалась) или принято и обосновано решение о прямом входе без неё</li>
+            <li>Характеристики поданы в маркетинговое исследование</li>
+            <li>Институциональная потребность сформирована или подтверждена</li>
+            <li>Рассчитана предварительная экономика</li>
+            <li>Готов первый управляемый вход в закупку</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-card s2">
+      <div class="stage-head"><span class="name">2. ТАМЫР</span><span class="period">4–14 месяцев</span></div>
+      <div class="stage-sub">Укоренение</div>
+      <div class="goal-box"><strong>Цель:</strong> превратить действия, запущенные на БАСТАУ, в первые реальные коммерческие и закупочные результаты.</div>
+      <div class="two-col">
+        <div>
+          <h3>Основные действия</h3>
+          <ul>
+            <li>Получить первые результаты по маркетисследованиям и закупочным процедурам</li>
+            <li>Запустить фактические продажи AT Care через подписанных партнёров</li>
+            <li>Обеспечить физическое наличие тест-полосок</li>
+            <li>Получить первые данные sell-in и sell-out</li>
+            <li>Использовать результаты апробации ABK при закупочном решении</li>
+            <li>Пересчитать экономику на основании реальных условий</li>
+            <li>Скорректировать партнёрскую сеть по факту первых результатов</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Результат этапа</h3>
+          <ul>
+            <li>Первый тендерный или закупочный результат (выигран, проигран или на рассмотрении)</li>
+            <li>Работающий B2B-канал AT Care с полосками в наличии</li>
+            <li>Растущая установленная база</li>
+            <li>Понятный, подтверждённый данными статус ABK</li>
+            <li>Подтверждённая или скорректированная модель участия</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-card s3">
+      <div class="stage-head"><span class="name">3. ӨРКЕН</span><span class="period">14–24 месяца и далее</span></div>
+      <div class="stage-sub">Рост и масштабирование</div>
+      <div class="goal-box"><strong>Цель:</strong> перейти от отдельных сделок к устойчивому присутствию.</div>
+      <div class="two-col">
+        <div>
+          <h3>Основные действия</h3>
+          <ul>
+            <li>Повторять закупки</li>
+            <li>Расширить аптечное покрытие</li>
+            <li>Выйти в новые регионы</li>
+            <li>Использовать референсы первого цикла</li>
+            <li>Подключить дополнительных партнёров</li>
+            <li>Оптимизировать посредническую маржу</li>
+            <li>Оценить возможность более прямого участия</li>
+            <li>Масштабировать ABK только при подтверждённом результате</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Результат этапа</h3>
+          <ul>
+            <li>Системное присутствие</li>
+            <li>Регулярные повторные продажи</li>
+            <li>Несколько регионов присутствия</li>
+            <li>Работающая партнёрская сеть</li>
+            <li>Понятная экономика</li>
+            <li>Управляемое масштабирование</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="funnels">
+  <div class="sec-in">
+    <p class="kicker">Партнёрские воронки</p>
+    <h2>Две отдельные воронки — разные цели, разные партнёры</h2>
+    <div class="grid2">
+      <div>
+        <div class="funnel-goal"><strong>Воронка 1 · AT Care — B2B.</strong> Найти минимум двух действующих партнёров для аптечного и коммерческого покрытия AT Care.</div>
+        <figure class="fig-card">
+          <svg viewBox="0 0 420 300" role="img" aria-label="Воронка B2B AT Care: 15 компаний в базе, переговоры проведены примерно с 8, коммерческие предложения — примерно 4, договоры — 2.">
+            <g font-family="system-ui" text-anchor="middle">
+              <polygon points="20,10 400,10 370,70 50,70" fill="#151B18" stroke="#2A332E"/>
+              <text x="210" y="45" fill="#F3F5F3" font-size="13" font-weight="700">База: 15 компаний</text>
+              <polygon points="50,80 370,80 335,140 85,140" fill="#151B18" stroke="#2A332E"/>
+              <text x="210" y="115" fill="#F3F5F3" font-size="13" font-weight="700">Переговоры: ≈8 (≈50%)</text>
+              <polygon points="85,150 335,150 300,210 120,210" fill="#0E2620" stroke="#009D7E"/>
+              <text x="210" y="185" fill="#F3F5F3" font-size="13" font-weight="700">Предложения: ≈4 (≈50%)</text>
+              <polygon points="120,220 300,220 270,280 150,280" fill="#2B2410" stroke="#FCC200"/>
+              <text x="210" y="255" fill="#FCC200" font-size="14" font-weight="800">Договоры: 2 (≈50%)</text>
+            </g>
+          </svg>
+          <figcaption>Аптечный / розничный и коммерческий каналы AT Care.</figcaption>
+        </figure>
+      </div>
+      <div>
+        <div class="funnel-goal" style="border-left:3px solid var(--yellow);"><strong>Воронка 2 · AT Care и ABK — B2G.</strong> Выбрать двух квалифицированных партнёров для участия в государственных закупках: одного основного и одного резервного.</div>
+        <figure class="fig-card">
+          <svg viewBox="0 0 420 300" role="img" aria-label="Воронка B2G: 10 кандидатов в базе, квалифицированы и приглашены на переговоры примерно 5, углублённые переговоры и проверка — 3–4, итоговый выбор — 2: основной и резервный.">
+            <g font-family="system-ui" text-anchor="middle">
+              <polygon points="20,10 400,10 370,70 50,70" fill="#151B18" stroke="#2A332E"/>
+              <text x="210" y="45" fill="#F3F5F3" font-size="13" font-weight="700">База: 10 кандидатов</text>
+              <polygon points="50,80 370,80 335,140 85,140" fill="#151B18" stroke="#2A332E"/>
+              <text x="210" y="115" fill="#F3F5F3" font-size="13" font-weight="700">Переговоры: ≈5 (≈50%)</text>
+              <polygon points="85,150 335,150 300,210 120,210" fill="#2B2410" stroke="#FCC200"/>
+              <text x="210" y="185" fill="#F3F5F3" font-size="13" font-weight="700">Проверка: 3–4</text>
+              <polygon points="120,220 300,220 270,280 150,280" fill="#0E2620" stroke="#009D7E"/>
+              <text x="210" y="255" fill="#5FD9BE" font-size="13" font-weight="800">Основной + резервный</text>
+            </g>
+          </svg>
+          <figcaption>Один основной и один резервный партнёр для B2G AT Care и ABK.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="tag hypo"><b>ЛОГИКА ВОРОНКИ.</b> Для расчёта усилий мы взяли условный плановый ориентир — переход примерно 50% с каждого шага на следующий. Это усреднённая рабочая оценка, а не отраслевая статистика: реальные цифры на конкретных этапах могут отличаться в любую сторону и уточняются по факту первых 30 дней переговоров.</div>
+  </div>
+</section>
+
+<section id="days60">
+  <div class="sec-in">
+    <p class="kicker">Первые 60 дней</p>
+    <h2>Три параллельных рабочих потока</h2>
+    <div class="tl-axis">
+      <div class="tl-line"></div>
+      <div class="tl-pt" style="left:2%">0</div>
+      <div class="tl-label" style="left:2%">День 0 · старт</div>
+      <div class="tl-pt mid" style="left:50%">30</div>
+      <div class="tl-label" style="left:50%">День 30</div>
+      <div class="tl-pt end" style="left:98%">60</div>
+      <div class="tl-label" style="left:98%; transform:translateX(-90%)">День 60 · Go/Pivot/Pause</div>
+    </div>
+    <div class="lanes">
+      <div class="lane l1">
+        <div class="dirtag">Направление: AT Care</div>
+        <div class="ltitle">Поток 1</div>
+        <div class="lgoal">Переговоры с дистрибьюторами</div>
+        <div class="phase">Дни 0–30</div>
+        <ul>
+          <li>Актуализировать контакты компаний из аналитического документа</li>
+          <li>Начать первичные обращения</li>
+          <li>Провести квалификацию кандидатов</li>
+          <li>Организовать онлайн-встречи</li>
+        </ul>
+        <div class="phase">Дни 30–60</div>
+        <ul>
+          <li>Получить данные: каналы, регионы, закупочный опыт, инфраструктура, ожидаемая маржа</li>
+          <li>Разделить кандидатов на B2B и B2G</li>
+          <li>Подготовить очные переговоры в Узбекистане</li>
+          <li>Сформировать shortlist партнёров</li>
+        </ul>
+      </div>
+      <div class="lane l2">
+        <div class="dirtag">Направление: AT Care</div>
+        <div class="ltitle">Поток 2</div>
+        <div class="lgoal">Исследование B2G-маршрута</div>
+        <div class="phase">Дни 0–30</div>
+        <ul>
+          <li>Изучить завершённые и планируемые закупки</li>
+          <li>Собрать цены, объёмы, технические характеристики, заказчиков, победителей, марки</li>
+          <li>Выяснить, где и как проводятся маркетинговые исследования</li>
+          <li>Определить инициаторов маркетинговых исследований</li>
+        </ul>
+        <div class="phase">Дни 30–60</div>
+        <ul>
+          <li>Выяснить требования к иностранному производителю и местному участнику</li>
+          <li>Определить порядок формирования и направления потребности</li>
+          <li>Проверить возможность прямого участия компании</li>
+          <li>Подготовить рабочий мониторинг закупок и маркетисследований</li>
+        </ul>
+      </div>
+      <div class="lane l3">
+        <div class="dirtag">Направление: ABK Care Multi</div>
+        <div class="ltitle">Поток 3</div>
+        <div class="lgoal">Подготовка входа ABK</div>
+        <div class="phase">Дни 0–30</div>
+        <ul>
+          <li>Выяснить, можно ли сразу подать характеристики ABK в маркетисследование</li>
+          <li>Определить, требуется ли апробация для формирования потребности</li>
+          <li>Установить, кто вправе инициировать и направить потребность</li>
+          <li>Определить потенциальные учреждения для апробации</li>
+        </ul>
+        <div class="phase">Дни 30–60</div>
+        <ul>
+          <li>Согласовать показатели, сроки, объём, ответственных, форму итогового документа</li>
+          <li>Подготовить оборудование, расходные материалы, обучение, сопровождение</li>
+          <li>Подготовить включение ABK в маркетинговое исследование</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trip" class="tight">
+  <div class="sec-in">
+    <p class="kicker">Первые 60 дней · выездной этап</p>
+    <h2>Деловая поездка в Узбекистан</h2>
+    <p class="lead">Ориентир — <strong>26–30 октября 2026, Ташкент</strong>, с привязкой к Всемирному дню борьбы с инсультом (29.10.2026): целесообразность участия и формат проверяются заранее как отдельная задача (раздел «План задач»).</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>Цели поездки</h3>
+        <ul>
+          <li>Очные переговоры с кандидатами в B2B и B2G</li>
+          <li>Оценка их инфраструктуры, каналов продаж и закупочного опыта</li>
+          <li>Обсуждение коммерческих условий и партнёрской маржи</li>
+          <li>Встречи с потенциальными учреждениями для апробации ABK</li>
+          <li>Подтверждение маршрута передачи результатов апробации</li>
+          <li>Оценка возможности участия в мероприятиях Дня борьбы с инсультом и, при положительном решении, демонстрация ABK</li>
+          <li>При наличии предварительного письменного согласования — передача комплекта ABK и запуск апробации</li>
+          <li>Формирование основного и резервного B2G-партнёра</li>
+        </ul>
+      </div>
+      <div class="card accent-y">
+        <h3>Условия готовности к поездке</h3>
+        <ul class="checklist" style="grid-template-columns:1fr;">
+          <li>Назначены встречи</li>
+          <li>Проведены первые контакты с Ассоциацией иностранных фармпроизводителей и ТПП Узбекистана</li>
+          <li>Подготовлены презентационные и технические материалы</li>
+          <li>Сформированы вопросы для квалификации партнёров</li>
+          <li>Определены потенциальные учреждения</li>
+          <li>Принято решение по участию в Дне борьбы с инсультом</li>
+          <li>Согласованы условия передачи ABK либо подготовлены переговоры по апробации</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fine" style="margin-top:14px;">Состав участников поездки утверждается отдельно, ближе к дате выезда.</p>
+  </div>
+</section>
+
+<section id="abkroute">
+  <div class="sec-in">
+    <p class="kicker">Модель формирования потребности</p>
+    <h2>Маршрут ABK: прямой вход или апробация</h2>
+    <p class="lead">Апробация проводится не ради тестирования прибора как самоцели, а как инструмент подтверждения практической применимости, формирования институциональной потребности и последующего включения характеристик продукта в маркетинговое исследование. Она не считается обязательной заранее.</p>
+    <div class="rf-box hl" style="margin-top:16px;"><span class="rf-head">Шаг 1</span>Проверить возможность прямого входа в маркетинговое исследование</div>
+    <div class="rf-arrow">↓</div>
+    <div class="route-flow">
+      <div class="rf-col">
+        <div class="rf-head" style="color:var(--green);">Путь A — прямой вход возможен</div>
+        <div class="rf-box">2. Подготовить и подать характеристики ABK</div>
+        <div class="rf-arrow">↓</div>
+        <div class="rf-box hl">Включение в маркетинговое исследование</div>
+      </div>
+      <div class="rf-col">
+        <div class="rf-head" style="color:var(--yellow);">Путь B — нужна подтверждённая потребность</div>
+        <div class="rf-box">3. Согласовать апробацию</div>
+        <div class="rf-arrow">↓</div>
+        <div class="rf-box">4. Провести апробацию в 1–3 учреждениях ПМСП</div>
+        <div class="rf-arrow">↓</div>
+        <div class="rf-box">5. Получить акт, заключение, расчёт функциональной потребности</div>
+        <div class="rf-arrow">↓</div>
+        <div class="rf-box">6. Направить результаты уполномоченной организации</div>
+        <div class="rf-arrow">↓</div>
+        <div class="rf-box hl">7. Использовать результаты для включения в маркетисследование и подготовки закупки</div>
+      </div>
+    </div>
+    <div class="tag warn" style="margin-top:18px;">
+      <b>ОГРАНИЧЕНИЯ.</b>
+      <ul style="margin:8px 0 0; padding-left:18px;">
+        <li>Закупка после апробации не гарантируется</li>
+        <li>Технические требования не формируются исключительно под бренд ABK</li>
+        <li>До передачи оборудования должен быть подтверждён маршрут использования результатов</li>
+        <li>Учреждение, ответственное лицо, сроки, объём и форма итогового документа согласовываются письменно</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="participation">
+  <div class="sec-in">
+    <p class="kicker">Модели участия в закупках</p>
+    <h2>Три варианта входа</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Критерий</th><th>Самостоятельный вход</th><th>Через местного дистрибьютора</th><th>Управляемый партнёрский вход</th></tr></thead>
+        <tbody>
+          <tr><td>Сроки</td><td>Длительные</td><td>Короткие</td><td>Короткие</td></tr>
+          <tr><td>Документы и регистрация</td><td>Большой объём</td><td>Минимальный для нас</td><td>Умеренный</td></tr>
+          <tr><td>Контроль цены и позиционирования</td><td>Полный</td><td>Ограниченный</td><td>Частичный, но стратегический</td></tr>
+          <tr><td>Импорт и логистика</td><td>Своими силами</td><td>Через партнёра</td><td>Через партнёра, под контролем компании</td></tr>
+          <tr><td>Риск зависимости</td><td>Низкий</td><td>Высокий</td><td>Средний, управляемый</td></tr>
+          <tr><td>Необходимые ресурсы</td><td>Собственная инфраструктура</td><td>Инфраструктура партнёра</td><td>Минимальная своя + инфраструктура партнёра</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h3>Что означает «управляемый партнёрский вход»</h3>
+      <ul>
+        <li>«Аксель и А» самостоятельно формирует спрос</li>
+        <li>Ведёт стратегические переговоры</li>
+        <li>Контролирует позиционирование, цену и документы</li>
+        <li>Местный партнёр обеспечивает импорт</li>
+        <li>Участвует в закупочной процедуре</li>
+        <li>Выполняет поставку, расчёты и локальное сопровождение</li>
+      </ul>
+      <p class="fine" style="margin-top:8px;">Это не передача рынка дистрибьютору, а использование его инфраструктуры при сохранении стратегического контроля со стороны компании.</p>
+    </div>
+    <div class="tag hypo"><b>РАБОЧАЯ ГИПОТЕЗА — НЕ РЕШЕНИЕ.</b> На начальном этапе наиболее быстрым вариантом может стать управляемый партнёрский вход с неэксклюзивным местным партнёром. Окончательное решение принимается после переговоров, проверки документов и расчёта экономики.</div>
+  </div>
+</section>
+
+<section id="economics">
+  <div class="sec-in">
+    <p class="kicker">Экономика входа</p>
+    <h2>Формула предельной цены</h2>
+    <figure class="fig-card">
+      <div class="formula-strip">
+        <div class="f-box">Предельная закупочная цена</div>
+        <span class="f-op">−</span><div class="f-box">Налоги и импорт</div>
+        <span class="f-op">−</span><div class="f-box">Регистрация</div>
+        <span class="f-op">−</span><div class="f-box">Логистика</div>
+        <span class="f-op">−</span><div class="f-box">Сервис</div>
+        <span class="f-op">−</span><div class="f-box">Тендерные расходы</div>
+        <span class="f-op">−</span><div class="f-box">Маржа партнёра</div>
+        <span class="f-op">=</span><div class="f-box result">Максимальная цена производителя</div>
+      </div>
+    </figure>
+    <p style="margin-top:16px;">Расчёт ведётся отдельно по трём контурам:</p>
+    <div class="bucket-row">
+      <span class="bucket">AT Care B2G</span>
+      <span class="bucket">AT Care B2B</span>
+      <span class="bucket">ABK Care Multi B2G</span>
+    </div>
+    <h3>Что нужно собрать до расчёта</h3>
+    <ul>
+      <li>Цены завершённых закупок, объёмы, победителей, марки</li>
+      <li>Условия оплаты и технические требования</li>
+      <li>Стоимость импорта</li>
+      <li>Маржу партнёров</li>
+      <li>Стоимость владения AT Care</li>
+      <li>Стоимость одного обследования ABK</li>
+    </ul>
+  </div>
+</section>
+
+<section id="status">
+  <div class="sec-in">
+    <p class="kicker">Контрольные статусы проекта</p>
+    <h2>Go / Pivot / Pause</h2>
+    <div class="principle">
+      <b class="h">СТРАТЕГИЯ НЕ МЕНЯЕТСЯ</b>
+      <p>Если конкретный шаг или инструмент не сработал — меняется тактика: партнёр, канал, регион, цена, формат апробации. Цель проекта и три этапа маршрута (БАСТАУ → ТАМЫР → ӨРКЕН) остаются неизменными независимо от результатов тактических решений.</p>
+    </div>
+    <p class="lead">Go / Pivot / Pause — не этапы программы, а статусы для принятия управленческих решений в контрольных точках. Решения принимаются отдельно по трём контурам.</p>
+    <div class="gpp-legend">
+      <div class="item go"><b>GO</b>Данные подтверждены — продолжаем выбранную тактику</div>
+      <div class="item pivot"><b>PIVOT</b>Потенциал рынка подтверждён, но нужно изменить партнёра, цену, канал, предложение или модель участия</div>
+      <div class="item pause"><b>PAUSE</b>Направление временно приостанавливается до устранения критического ограничения</div>
+    </div>
+    <div class="contour-row">
+      <div class="cname">AT Care B2B</div>
+      <div class="contour-grid">
+        <div class="go"><strong>GO</strong>Партнёр подписан, полоски физически в наличии</div>
+        <div class="pivot"><strong>PIVOT</strong>Партнёр не устраивает по марже или охвату — ищем другого</div>
+        <div class="pause"><strong>PAUSE</strong>Нет пригодного партнёра в разумный срок</div>
+      </div>
+    </div>
+    <div class="contour-row">
+      <div class="cname">AT Care B2G</div>
+      <div class="contour-grid">
+        <div class="go"><strong>GO</strong>Заявка подана, допуск к процедуре получен</div>
+        <div class="pivot"><strong>PIVOT</strong>Цена или требования не сходятся — меняем модель или партнёра</div>
+        <div class="pause"><strong>PAUSE</strong>Обязательные формальные требования невыполнимы</div>
+      </div>
+    </div>
+    <div class="contour-row">
+      <div class="cname">ABK Care Multi B2G</div>
+      <div class="contour-grid">
+        <div class="go"><strong>GO</strong>Потребность подтверждена, путь в маркетисследование открыт</div>
+        <div class="pivot"><strong>PIVOT</strong>Нужен другой регион, сценарий применения или формат апробации</div>
+        <div class="pause"><strong>PAUSE</strong>Потребность не подтверждается ни одним каналом</div>
+      </div>
+    </div>
+    <div class="tag hypo"><b>ПРИНЦИП.</b> Понятный отказ — не результат Go. Неподанная заявка — не тендерный результат. Пауза по одному контуру, лоту или партнёру не означает остановку всей программы.</div>
+  </div>
+</section>
+
+<section id="team" class="tight">
+  <div class="sec-in">
+    <p class="kicker">Командный центр программы</p>
+    <h2>Функции команды</h2>
+    <div class="grid3">
+      <div class="card func-card"><h3>Руководитель проекта</h3><p style="margin:0;font-size:13px;">Общая координация программы, сроки, коммуникация с руководством, решения Go / Pivot / Pause.</p></div>
+      <div class="card func-card"><h3>Коммерческий блок</h3><p style="margin:0;font-size:13px;">Переговоры с дистрибьюторами и партнёрами по B2B и B2G, коммерческие условия, договоры.</p></div>
+      <div class="card func-card"><h3>Регуляторно-закупочная функция</h3><p style="margin:0;font-size:13px;">Регистрация продукции, сертификаты, маркировка, тендерная документация, мониторинг закупок и маркетисследований.</p></div>
+      <div class="card func-card"><h3>Продуктовая и медицинская валидация</h3><p style="margin:0;font-size:13px;">Адаптация продукта и документов под требования рынка, апробация ABK. Внутренний специалист по продукту; при необходимости — внешний медицинский консультант.</p></div>
+      <div class="card func-card"><h3>Финансовая функция</h3><p style="margin:0;font-size:13px;">Расчёт экономики, предельных цен, бюджета ресурсов, контроль затрат.</p></div>
+      <div class="card func-card"><h3>Юридическая функция</h3><p style="margin:0;font-size:13px;">Договоры, протоколы апробации, комплаенс, консультации по закупочному праву.</p></div>
+    </div>
+    <p class="fine" style="margin-top:16px;">На этапе БАСТАУ проект реализуется действующей командой компании. Необходимость привлечения дополнительных специалистов определяется по результатам первых 60 дней.</p>
+  </div>
+</section>
+
+<section id="plan60">
+  <div class="sec-in">
+    <p class="kicker">Итоговый план · этап БАСТАУ</p>
+    <h2>Задачи этапа БАСТАУ: 22.09.2026 – 21.01.2027 (0–4 месяца)</h2>
+    <p class="lead">Каждый открытый вопрос программы переведён в задачу с датой, ожидаемым результатом и ответственной функцией — это план, который можно сразу передавать в работу. День 60 (21.11.2026) — промежуточная сверка Go/Pivot/Pause внутри этапа, не его окончание.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Блок</th><th>Задача</th><th>Ожидаемый результат</th><th>Срок</th><th>Ответственная функция</th></tr></thead>
+        <tbody>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>AT · B2B</span></td><td>Актуализировать контакты компаний из аналитического документа</td><td>Список ~15 компаний с актуальными данными</td><td>22–26.09.2026</td><td>Коммерческий блок</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>AT · B2B</span></td><td>Начать первичные обращения ко всем контактам базы</td><td>Отправлены запросы, определены контактные лица</td><td>29.09–01.10.2026</td><td>Коммерческий блок</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>AT · B2B</span></td><td>Провести квалификацию кандидатов (каналы, регионы, опыт, маржа)</td><td>Заполненные анкеты по базе</td><td>01–10.10.2026</td><td>Коммерческий блок</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>AT · B2B</span></td><td>Провести онлайн-встречи с заинтересованными кандидатами</td><td>Проведены встречи с ≈8 компаниями</td><td>13–17.10.2026</td><td>Коммерческий блок</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>AT · B2B</span></td><td>Разделить кандидатов на B2B и B2G, сформировать shortlist для очных переговоров</td><td>Shortlist кандидатов на поездку</td><td>20–21.10.2026</td><td>Коммерческий блок</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Провести аудит действующих РУ и сертификатов по AT/ABK и расходникам, определить держателя РУ</td><td>Отчёт о статусе регистрации</td><td>22.09–03.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Уточнить требования к маркировке и инструкциям на местных языках</td><td>Список требований к маркировке</td><td>22.09–03.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Собрать историю завершённых закупок и календарь планируемых</td><td>Таблица лотов 2023–2026 и календарь</td><td>22.09–03.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Выяснить, где и как проводятся маркетинговые исследования, кто их инициирует</td><td>Понятен процесс, есть контакт в Центре закупок</td><td>22.09–02.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Определить фактические цены конкурентов по итогам прошедших закупок</td><td>Ценовой ориентир по AT-конкурентам</td><td>06–10.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Запросить требования к иностранному производителю и местному участнику процедуры</td><td>Официальный ответ или письменная консультация</td><td>06–17.10.2026</td><td>Регуляторно-закупочная / Юридическая</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Определить порядок формирования и направления медицинской потребности</td><td>Понятна цепочка от потребности до закупки</td><td>06–17.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Проверить возможность прямого участия компании в закупках</td><td>Зафиксирован ответ, с обоснованием</td><td>13–17.10.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Выяснить условия обеспечения заявки, налоги, пошлины, сроки оплаты</td><td>Данные для расчёта экономики</td><td>06–17.10.2026</td><td>Финансовая функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Настроить регулярный мониторинг маркетисследований и тендеров</td><td>Работающий еженедельный процесс</td><td>до 10.10.2026, далее постоянно</td><td>Регуляторно-закупочная функция</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Выяснить, можно ли подать характеристики ABK в маркетисследование без апробации</td><td>Ответ Минздрава / Центра закупок</td><td>22.09–10.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Уточнить, какие показатели апробации важны для закупочного решения</td><td>Список значимых показателей</td><td>06–17.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Определить, кто вправе инициировать и направить потребность</td><td>Понятен маршрут потребности</td><td>06–17.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Выяснить порядок финансирования расходников по ПП-20</td><td>Понятно, кто оплачивает полоски/реагенты в госпрограмме</td><td>06–17.10.2026</td><td>Финансовая функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Выяснить возможность внесения результатов ABK в медицинскую информационную систему</td><td>Ответ по технической совместимости</td><td>13–24.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Определить потенциальные учреждения ПМСП для апробации (Ташкент/Самарканд)</td><td>Список 3–5 учреждений с контактами</td><td>22.09–03.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Подготовить проект протокола апробации (цель, срок, объём, показатели, форма акта)</td><td>Готовый шаблон протокола</td><td>06–10.10.2026</td><td>Продуктовая / Юридическая</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Подготовить комплект для демонстрации и апробации (приборы, полоски, документы)</td><td>Комплект готов к перевозке</td><td>до 20.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--ink-faint)"></span>Ассоциации</span></td><td>Выйти на Ассоциацию представительств иностранных фармпроизводителей в Узбекистане</td><td>Назначена ознакомительная встреча</td><td>22.09–03.10.2026</td><td>Руководитель проекта</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--ink-faint)"></span>Ассоциации</span></td><td>Выйти на ТПП Узбекистана</td><td>Назначена встреча, понятны инструменты B2B-мэтчмейкинга</td><td>22.09–03.10.2026</td><td>Руководитель проекта</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--ink-faint)"></span>Ассоциации</span></td><td>Использовать казахстанско-узбекские деловые площадки как канал знакомств с ЛПР</td><td>Минимум один представленный контакт или встреча</td><td>06–17.10.2026</td><td>Руководитель проекта</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>День инсульта</span></td><td>Выяснить, как компания может поучаствовать в мероприятиях Дня борьбы с инсультом в Ташкенте и нужно ли нам это</td><td>Принято решение: участвовать / наблюдать / не участвовать, с обоснованием</td><td>22.09–06.10.2026</td><td>Руководитель / Продуктовая валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>День инсульта</span></td><td>Если решение «участвовать» — уточнить формат, организаторов и требования</td><td>Понятен формат участия и следующий шаг</td><td>07–17.10.2026</td><td>Руководитель проекта</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>Поездка</span></td><td>Утвердить даты и маршрут поездки (26–30.10.2026, Ташкент)</td><td>Утверждённый график поездки</td><td>до 17.10.2026</td><td>Руководитель проекта</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>Поездка</span></td><td>Назначить очные встречи с shortlist B2B и B2G кандидатами</td><td>Подтверждённые встречи на все дни поездки</td><td>20–24.10.2026</td><td>Коммерческий блок</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>Поездка</span></td><td>Подготовить презентационные и технические материалы для встреч</td><td>Готовые материалы на русском/узбекском</td><td>13–24.10.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>Поездка</span></td><td>Провести поездку: переговоры с партнёрами, посещение учреждений для апробации, участие/наблюдение в Дне борьбы с инсультом</td><td>Предварительные договорённости, подтверждён маршрут ABK</td><td>26–30.10.2026</td><td>Руководитель + Коммерческий блок</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--ink-faint)"></span>Экономика</span></td><td>Рассчитать предварительную экономику по трём контурам (AT B2G, AT B2B, ABK B2G)</td><td>Диапазон допустимой цены по каждому контуру</td><td>27.10–07.11.2026</td><td>Финансовая функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--ink-faint)"></span>Ресурсы</span></td><td>Собрать коммерческие предложения по ресурсам БАСТАУ и подготовить бюджет</td><td>Предварительный бюджет этапа</td><td>27.10–14.11.2026</td><td>Финансовая функция</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:#fff"></span>Сверка дня 60</span></td><td>Свести результаты первых 60 дней, подготовить промежуточные решения Go / Pivot / Pause по трём контурам</td><td>Промежуточный отчёт для руководства</td><td>17–21.11.2026</td><td>Руководитель проекта</td></tr>
+
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Провести апробацию ABK в 1–3 учреждениях ПМСП (после передачи оборудования на поездке)</td><td>Акт апробации и расчёт функциональной потребности</td><td>24.11–19.12.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--yellow)"></span>ABK</span></td><td>Сформировать и направить институциональную потребность ABK уполномоченной организации</td><td>Потребность формально направлена</td><td>22–31.12.2026</td><td>Продуктовая и медицинская валидация</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--teal)"></span>AT · B2G</span></td><td>Подать характеристики AT и ABK в ближайшее доступное маркетинговое исследование</td><td>Характеристики поданы, факт подачи зафиксирован</td><td>по мере появления исследования, ориентир до 31.12.2026</td><td>Регуляторно-закупочная функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:var(--green)"></span>Договоры</span></td><td>Завершить переговоры и подписать договоры с основным и резервным партнёром (B2B и B2G)</td><td>Договоры подписаны или на финальной стадии согласования</td><td>24.11.2026–21.01.2027</td><td>Коммерческий блок / Юридическая функция</td></tr>
+          <tr><td><span class="cat"><span class="d" style="background:#fff"></span>Итог БАСТАУ</span></td><td>Свести итоги этапа БАСТАУ (4 месяца), подтвердить готовность к этапу ТАМЫР</td><td>Итоговый отчёт по этапу и статус по каждому контуру</td><td>18–21.01.2027</td><td>Руководитель проекта</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="resources" class="tight">
+  <div class="sec-in">
+    <p class="kicker">Ресурсный план</p>
+    <h2>Статьи ресурсов этапа БАСТАУ</h2>
+    <div class="grid2">
+      <ul style="margin:0;">
+        <li>Регуляторная и документальная подготовка</li>
+        <li>Локальная экспертная и организационная поддержка — юридические и закупочные консультации, сопровождение местного партнёра</li>
+        <li>Деловая поездка</li>
+        <li>Комплект для демонстрации и апробации — приборы, тест-полоски, контрольные материалы, сопроводительные документы</li>
+      </ul>
+      <ul style="margin:0;">
+        <li>Перевод и адаптация материалов</li>
+        <li>Импорт и логистика</li>
+        <li>Обучение и сопровождение</li>
+        <li>Сервис и страховой запас</li>
+      </ul>
+    </div>
+    <div class="tag hypo" style="margin-top:18px;"><b>СУММЫ НЕ ОПРЕДЕЛЕНЫ.</b> Точные суммы определяются в ходе этапа БАСТАУ после получения коммерческих предложений и расчёта выбранной модели входа. Согласуется перечень ресурсов, а не суммы.</div>
+  </div>
+</section>
+
+<section id="decisions">
+  <div class="closing" style="padding:0; background:none; border:none;">
+    <div class="sec-in" style="padding:0;">
+      <p class="kicker">Итог</p>
+      <h2>Что необходимо согласовать руководству</h2>
+      <div class="decision-cols">
+        <ol>
+          <li><span class="chip g">1</span>Запуск проекта А-КЕРУЕН</li>
+          <li><span class="chip g">2</span>Цель проекта и три этапа реализации</li>
+          <li><span class="chip g">3</span>Запуск этапа БАСТАУ</li>
+          <li><span class="chip g">4</span>План первых 60 дней</li>
+          <li><span class="chip g">5</span>Проведение переговоров с потенциальными партнёрами</li>
+        </ol>
+        <ol>
+          <li><span class="chip g">6</span>Подготовку деловой поездки в Узбекистан</li>
+          <li><span class="chip g">7</span>Подготовку маршрута апробации ABK</li>
+          <li><span class="chip g">8</span>Перечень необходимых ресурсов</li>
+          <li><span class="chip g">9</span>Полномочия команды на сбор информации и предварительные переговоры</li>
+          <li><span class="chip g">10</span>Представление результатов первых 60 дней с решением Go / Pivot / Pause по каждому направлению</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sources" class="tight">
+  <div class="sec-in">
+    <p class="kicker">Основания программы</p>
+    <h2>Источники</h2>
+    <ul class="src-list">
+      <li><a href="https://lex.uz/ru/docs/8013798" target="_blank" rel="noopener">ПП-20 от 20.01.2026 — LexUZ</a></li>
+      <li><a href="https://lex.uz/ru/docs/5838972" target="_blank" rel="noopener">ПП-102 от 26.01.2022 — LexUZ</a></li>
+      <li><span class="nolink">ПП-408 от 29.11.2024 (централизация закупок здравоохранения)</span> <span class="note">— ссылка уточняется</span></li>
+      <li><a href="https://diabetesatlas.org/data-by-location/country/uzbekistan/" target="_blank" rel="noopener">IDF Diabetes Atlas — Uzbekistan</a></li>
+      <li><a href="https://gov.uz/ru/uzmedimpex/news/marketing-tadqiqotlari" target="_blank" rel="noopener">Центр закупок Минздрава — маркетинговые исследования</a></li>
+      <li><a href="https://gov.uz/ru/uzmedimpex/news/view/136978" target="_blank" rel="noopener">Центр закупок — маркетисследование по ПП-102 (2026)</a></li>
+      <li><a href="https://xarid.uzex.uz/" target="_blank" rel="noopener">xarid.uzex.uz — государственные закупки</a></li>
+      <li><a href="https://farma.uzex.uz/" target="_blank" rel="noopener">farma.uzex.uz — фармацевтические закупки</a></li>
+      <li><a href="https://uzex.uz/" target="_blank" rel="noopener">uzex.uz — товарно-сырьевая биржа</a></li>
+      <li><span class="nolink">Аналитический документ по рынку Узбекистана (кабинетное исследование, сентябрь 2026)</span></li>
+    </ul>
+    <p class="fine" style="margin-top:16px;">Кандидаты в партнёры — источники для due diligence:</p>
+    <ul class="src-list">
+      <li><a href="https://gopharm.uz/catalog/gljukometry" target="_blank" rel="noopener">GoPharm / Grand Pharm</a></li>
+      <li><a href="https://doridarmon.uz/" target="_blank" rel="noopener">Dori-Darmon</a></li>
+      <li><a href="https://oxymed.uz/about" target="_blank" rel="noopener">OXYmed</a></li>
+      <li><a href="https://asklepiygroup.uz/" target="_blank" rel="noopener">Asklepiy Group</a></li>
+      <li><a href="https://navbahorholding.uz/" target="_blank" rel="noopener">Navbahor Holding</a></li>
+      <li><a href="https://medilife-farma.com/en/products" target="_blank" rel="noopener">Medilife-Farma</a></li>
+    </ul>
+    <p class="fine" style="margin-top:10px;">Asia Pharm исключён из шортлиста кандидатов — собственный бренд глюкометров (Medico) создаёт конфликт интересов.</p>
+  </div>
+</section>
+
+<footer class="closing">
+  <div class="sec-in">
+    <div class="sign">
+      <div><b>Подготовила:</b> Оспанова Роза</div>
+      <div><b>Должность:</b> бренд-менеджер</div>
+      <div><b>Компания:</b> «Аксель и А»</div>
+      <div><b>Дата:</b> сентябрь 2026 года</div>
+    </div>
+    <p class="disclaimer">Программа подготовлена для внутреннего согласования.</p>
+  </div>
+</footer>
+
+</body>
+</html>
